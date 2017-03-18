@@ -1,5 +1,9 @@
 local M, module = {}, ...
 
+function validate(port, dim)
+    return port and dim and port >= 0 and port < 16 and dim >= 0 and dim <= 100
+end
+
 function M.handle(client, request)
     package.loaded[module]=nil
 
@@ -15,28 +19,27 @@ function M.handle(client, request)
     end
 
     local port, dim = string.match(path,"/P(%d+)/(%d+)")
-    if method == "GET" and port and dim then
+    port = tonumber(port)
+    dim = tonumber(dim)
+
+    if method == "GET" and validate(port, dim) then
         local buf = "HTTP/1.1 200 OK\n\n"
-        buf = buf .. "Setting port " .. port .. " to value " .. dim
+        buf = buf .. "Setting port " .. port .. " to value " .. dim .. "\n"
 
         client:send(buf)
         return 200, method, port, dim
-    end
-
-    if method == "GET" and path == "/" then
+    elseif method == "GET" and path == "/" then
         local buf = "HTTP/1.1 200 OK\n\n"
-        buf = buf .. "proccessed" 
+        buf = buf .. "nodemcu ok\n" 
 
         client:send(buf)
-        
-        return 200, method, "", ""
+        return 200, method, nil, nil
     else
         local buf = "HTTP/1.1 400 Bad Request\n\n"
-        buf = buf .. "cannot process request: " .. method .. " " .. path 
+        buf = buf .. "cannot process request: " .. method .. " " .. path .. "\n"
 
         client:send(buf)
-    
-        return 400, method, "", ""
+        return 400, method, nil, nil
     end
 end
 
