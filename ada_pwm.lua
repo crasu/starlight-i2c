@@ -48,13 +48,17 @@ function write_12_bit(a)
 end  
 
 function M.init_pca()
-    write_reg(mode1, rst)           --reset device
+    write_reg(mode1, rst) 
 
-    if (read_reg(mode1)==0x01) then --check status
+    if (read_reg(mode1)==0x01) then 
         status = true 
+        print("PCA9685 Init OK")
+    else 
         status = false
-    write_reg(mode1, 0xA0) --10100000 - set for auto-increment 
+        print("PCA9685 Init Failure!")
+    end
 
+    write_reg(mode1, 0xA0) --10100000 - set for auto-increment 
 
     --External N-type driver
     write_reg(mode2, 0x04)   -- set to output mode INVRT = 0 OUTDRV = 1
@@ -67,16 +71,16 @@ end
 
 
 function write_led(ledN, LED_ON, LED_OFF)
-	  i2c.start(id)
-	  i2c.address(id, dev_addr ,i2c.TRANSMITTER)
-	  i2c.write(id,led0+4*ledN)
-	  write_12_bit(LED_ON)
-	  i2c.write(id,al)
-	  i2c.write(id,ah)
-	  write_12_bit(LED_OFF)
-	  i2c.write(id,al)
-	  i2c.write(id,ah)
-	  i2c.stop(id)
+    i2c.start(id)
+    i2c.address(id, dev_addr ,i2c.TRANSMITTER)
+    i2c.write(id,led0+4*ledN)
+    write_12_bit(LED_ON)
+    i2c.write(id,al)
+    i2c.write(id,ah)
+    write_12_bit(LED_OFF)
+    i2c.write(id,al)
+    i2c.write(id,ah)
+    i2c.stop(id)
 end
 
 
