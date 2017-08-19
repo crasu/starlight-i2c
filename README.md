@@ -14,4 +14,4 @@ Sometimes you have to use flash mode dio for nodemcu/non adafruit. The firmware 
 
 ## Http api
 
-    curl http://192.168.178.120/P12/70
+    curl http://192.168.178.120/P12/70/F0
