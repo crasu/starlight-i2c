@@ -18,7 +18,7 @@ function M.handle(client, request)
         end
     end
 
-    local port, dim, fade = string.match(path,"/P(%d+)/(%d+)/F(%d)")
+    local port, dim, fade = string.match(path,"/P(%d+)/(%d+)/F(%d+)")
     port = tonumber(port)
     dim = tonumber(dim)
     fade = tonumber(fade)
